@@ -1,31 +1,26 @@
 {
-  "name": "macaca-test-sample",
-  "version": "1.0.8",
-  "description": "macaca-test-sample",
+  "name": "sample-nodejs",
+  "version": "1.0.0",
+  "description": "Macaca sample for Node.js",
   "keywords": [
     "macaca",
-    "sample"
+    "sample",
+    "automation"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/macacajs/macaca-test-sample.git"
-  },
-  "dependencies": {
-    "macaca-utils": "~0.1.8"
+    "url": "git://github.com/macaca-sample/sample-nodejs.git"
   },
   "devDependencies": {
-    "jshint": "*",
-    "macaca-cli": "^1.0.15",
-    "pre-commit": "1.1.1",
-    "webdriver-client": "~1.0.0"
+    "blink-diff": "^1.0.13",
+    "detect-port": "^1.1.4",
+    "macaca-cli": "^2.0.0",
+    "macaca-simple-reportor": "^1.0.0",
+    "macaca-utils": "^0.1.8",
+    "macaca-wd": "^1.0.12",
+    "mocha": "^3.2.0",
+    "should": "^11.1.2",
+    "webdriver-keycode": "^1.0.2"
   },
-  "scripts": {
-    "test": "make test-pc",
-    "jshint": "make jshint"
-  },
-  "pre-commit": [
-    "jshint"
-  ],
-  "homepage": "https://github.com/macacajs/macaca-test-sample",
   "license": "MIT"
 }
