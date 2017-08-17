@@ -7,7 +7,7 @@ services: docker
 
 before_script:
 
-script: make test-ios
+script: platform=ios macaca run --verbose -d ./macaca-test/mobile-app-sample.test.js
 after_script: 
 
 after_failure: 
