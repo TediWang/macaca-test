@@ -1,64 +1,46 @@
 git_version = $$(git branch 2>/dev/null | sed -e '/^[^*]/d'-e's/* \(.*\)/\1/')
 npm_bin= $$(npm bin)
-custom_port = `${npm_bin}/detect-port 3458 -s`
 
 all: test
 install:
 	@npm install
 test:
 	@echo ""
-	@echo "make test-ios               Test sample for iOS"
-	@echo "make test-android           Test sample for Android"
-	@echo "make test-ios-safari        Test sample for iOS Safari"
-	@echo "make test-android-chrome    Test sample for Android Chrome"
-	@echo "make test-desktop-electron  Test sample for Desktop PC"
-	@echo "make test-desktop-chrome    Test sample for Desktop PC"
-	@echo "make custom-reporter        Test sample for PC with custom reporter"
-test-ios:
+	@echo "make test-ios             Test sample for iOS"
+	@echo "make test-ios-safari      Test sample for iOS Safari"
+	@echo "make test-android         Test sample for Android"
+	@echo "make test-android-chrome  Test sample for Android Chrome"
+	@echo "make test-pc              Test sample for PC"
+test-ios: install
 	macaca doctor
-	platform=ios macaca run --verbose -d ./macaca-test/mobile-app-sample.test.js
-travis-ios: install
-	npm install macaca-ios --save-dev
+	platform=ios macaca run --verbose -d ./macaca-test/macaca-mobile-sample.test.js
+test-ios-safari: install
+	macaca doctor
+	browser=safari macaca run --verbose -d ./macaca-test/macaca-mobile-browser-sample.test.js
+test-android-chrome: install
+	macaca doctor
+	browser=chrome macaca run --verbose -d ./macaca-test/macaca-mobile-browser-sample.test.js
+test-android: install
+	macaca doctor
+	platform=android macaca run --verbose -d ./macaca-test/macaca-mobile-sample.test.js
+test-pc:
+	macaca install electron
+	macaca doctor
+	macaca run --verbose -d ./macaca-test/macaca-desktop-sample.test.js
+travis-pc:
+	${npm_bin}/macaca install electron
 	${npm_bin}/macaca doctor
-	platform=ios ${npm_bin}/macaca run --verbose -d ./macaca-test/mobile-app-sample.test.js
-test-android:
-	macaca doctor
-	platform=android macaca run --verbose -d ./macaca-test/mobile-app-sample.test.js
+	${npm_bin}/macaca run -d ./macaca-test/macaca-desktop-sample.test.js --no-window
+travis: install travis-pc
+	@echo travis passed
 travis-android: install
-	CHROMEDRIVER_VERSION=2.20 npm install macaca-android --save-dev
+	${npm_bin}/macaca install android
 	${npm_bin}/macaca doctor
-	platform=android ${npm_bin}/macaca run --verbose -d ./macaca-test/mobile-app-sample.test.js
-test-ios-safari:
-	macaca doctor
-	browser=safari macaca run --verbose -d ./macaca-test/mobile-browser-sample.test.js
-travis-ios-safari: install
-	npm install macaca-ios --save-dev
+	platform=android ${npm_bin}/macaca run --verbose -d ./macaca-test/macaca-mobile-sample.test.js
+travis-ios: install
+	${npm_bin}/macaca install ios
 	${npm_bin}/macaca doctor
-	browser=safari ${npm_bin}/macaca run --verbose -d ./macaca-test/mobile-browser-sample.test.js
-test-android-chrome:
-	macaca doctor
-	browser=chrome macaca run --verbose -d ./macaca-test/mobile-browser-sample.test.js
-travis-android-chrome: install
-	CHROMEDRIVER_VERSION=2.20 npm install macaca-android --save-dev
-	${npm_bin}/macaca doctor
-	browser=chrome ${npm_bin}/macaca run --verbose -d ./macaca-test/mobile-browser-sample.test.js
-test-desktop-electron:
-	macaca doctor
-	browser=electron macaca run --verbose -d ./macaca-test/desktop-browser-sample.test.js
-travis-desktop-electron: install
-	npm install macaca-electron --save-dev
-	${npm_bin}/macaca doctor
-	browser=electron ${npm_bin}/macaca run --no-window --verbose -d ./macaca-test/desktop-browser-sample.test.js
-test-desktop-chrome:
-	macaca doctor
-	CHROMEDRIVER_VERSION=2.30 browser=chrome macaca run --verbose -d ./macaca-test/desktop-browser-sample.test.js
-custom-reporter:
-	npm install macaca-simple-reportor --save-dev
-	macaca doctor
-	CUSTOM_DIR=macaca-logs/desktop-browser-sample macaca run --verbose --reporter macaca-simple-reportor -d ./macaca-test/desktop-browser-sample.test.js
-custom-port:
-	npm install macaca-electron --save-dev
-	${npm_bin}/macaca doctor
-	MACACA_SERVER_PORT=${custom_port} browser=electron ${npm_bin}/macaca run --no-window --verbose -d ./macaca-test/desktop-browser-sample.test.js -p ${custom_port}
-
-.PHONY: test-pc
+	platform=ios ${npm_bin}/macaca run --verbose -d ./macaca-test/macaca-mobile-sample.test.js
+jshint:
+	@${npm_bin}/jshint .
+.PHONY: test
